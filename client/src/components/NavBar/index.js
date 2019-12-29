@@ -11,7 +11,7 @@ export function NavBar(props) {
               <i class="fas fa-bars"></i>
             </div>
             <a className="logo">
-              <i class="far fa-sticky-note"></i>
+              <i className="far fa-sticky-note"></i>
               <span>Notes</span>
             </a>
           </div>
