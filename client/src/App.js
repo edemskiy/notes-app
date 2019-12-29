@@ -3,15 +3,17 @@ import { BrowserRouter } from "react-router-dom";
 import { useRoutes } from "./routes";
 import { useAuth } from "./hooks/auth";
 import { AuthContext } from "./context/AuthContext";
+import { NavBar } from "./components/NavBar";
 
 function App() {
   const { login, logout, userToken, userId, isReady } = useAuth();
-  const userLoggedIn = !!userToken;
-  const routes = useRoutes(userLoggedIn);
+  const isUserLoggedIn = !!userToken;
+  const routes = useRoutes(isUserLoggedIn);
   return (
     <AuthContext.Provider
-      value={{ login, logout, userToken, userId, userLoggedIn }}
+      value={{ login, logout, userToken, userId, isUserLoggedIn }}
     >
+      {isUserLoggedIn && <NavBar logout={logout} />}
       <BrowserRouter>{routes}</BrowserRouter>
     </AuthContext.Provider>
   );
