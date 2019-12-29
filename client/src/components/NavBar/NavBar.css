@@ -54,13 +54,15 @@ nav {
 
 .search-and-tools > .searchbar {
   width: 70%;
+  max-width: 720px;
   padding: 10px;
   background-color: #f1f3f4;
   border-radius: 5px;
 }
 
 .search-and-tools > .searchbar > input {
-  width: 100%;
+  width: 95%;
+  padding: 0;
   font-size: 18px;
   background: none;
   border: none;
