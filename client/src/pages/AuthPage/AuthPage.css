@@ -1,0 +1,33 @@
+.auth_card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth_card > h1 {
+  margin: 20px 0;
+}
+
+.auth_buttons {
+  margin-top: 20px;
+}
+
+.auth_buttons > button {
+  font-family: Roboto;
+  padding: 10px;
+  color: #000;
+  background-color: rgb(211, 211, 211);
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100px;
+}
+
+.auth_buttons > button:hover {
+  cursor: pointer;
+  background-color: rgb(190, 190, 190);
+}
+.auth_buttons > button:disabled {
+  opacity: 0.5;
+}
