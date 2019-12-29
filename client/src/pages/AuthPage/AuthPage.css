@@ -6,6 +6,8 @@
 
 .auth_card > h1 {
   margin: 20px 0;
+  color: #505050;
+  font-weight: 400;
 }
 
 .auth_buttons {
@@ -15,10 +17,10 @@
 .auth_buttons > button {
   font-family: Roboto;
   padding: 10px;
-  color: #000;
-  background-color: rgb(211, 211, 211);
+  color: #505050;
+  background-color: #f1f3f4;
   margin: 5px;
-  border: 1px solid black;
+  border: none;
   border-radius: 5px;
   font-size: 16px;
   width: 100px;
@@ -26,7 +28,7 @@
 
 .auth_buttons > button:hover {
   cursor: pointer;
-  background-color: rgb(190, 190, 190);
+  background-color: #e6e6e6;
 }
 .auth_buttons > button:disabled {
   opacity: 0.5;
