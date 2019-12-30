@@ -13,7 +13,7 @@ function App() {
     <AuthContext.Provider
       value={{ login, logout, userToken, userId, isUserLoggedIn }}
     >
-      {isUserLoggedIn && <NavBar logout={logout} />}
+      {isUserLoggedIn && <NavBar />}
       <BrowserRouter>{routes}</BrowserRouter>
     </AuthContext.Provider>
   );
