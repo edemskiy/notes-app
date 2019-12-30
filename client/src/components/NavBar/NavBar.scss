@@ -1,0 +1,102 @@
+$navbar-height: 60px;
+$links-color: #5f6368;
+
+.empty {
+  height: $navbar-height;
+}
+
+.navbar-wrapper {
+  display: block;
+  background-color: #fff;
+  position: fixed;
+  z-index: 9999;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: $navbar-height;
+  border-bottom: 1px solid #b8bbbf;
+
+  nav {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: $navbar-height;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+  }
+}
+
+.menu-and-logo {
+  min-width: 230px;
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+
+  > .menu-icon {
+    font-size: 18px;
+    color: $links-color;
+    margin: 0 5px;
+    padding: 0 12px;
+  }
+
+  > .logo {
+    font-size: 28px;
+    font-weight: 100;
+    color: $links-color;
+    text-decoration: none;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.search-and-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex: 1 1 auto;
+
+  > .search-bar {
+    padding: 0 10px;
+    width: 100%;
+
+    > .search-form {
+      background-color: #f1f3f4;
+      border-radius: 5px;
+      max-width: 720px;
+
+      > input {
+        padding: 10px;
+        width: 100%;
+        font-size: 18px;
+        background: none;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+.tools {
+  > button.btn-logout {
+    font-size: 14px;
+    color: $links-color;
+    padding: 10px;
+    border: none;
+    background: none;
+    &:hover {
+      cursor: pointer;
+      color: #000;
+      background-color: #f1f3f4;
+      border-radius: 5px;
+    }
+  }
+}
