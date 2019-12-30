@@ -5,7 +5,7 @@ import InfoMessage from "../../components/InfoMessage";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 
-import "./AuthPage.css";
+import "./AuthPage.scss";
 
 export default function AuthPage() {
   const { login } = useContext(AuthContext);
