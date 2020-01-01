@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { SearchBar } from "../SearchBar";
 import "./NavBar.scss";
 
 export function NavBar() {
@@ -18,11 +19,7 @@ export function NavBar() {
             </a>
           </div>
           <div className="search-and-tools">
-            <div className="search-bar">
-              <form className="search-form">
-                <input placeholder="search" />
-              </form>
-            </div>
+            <SearchBar />
             <div className="tools">
               <button className="btn-logout" onClick={logout}>
                 Logout
