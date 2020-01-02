@@ -30,6 +30,7 @@ export function NewNote() {
     });
   }
 
+  /* close editor on outside click */
   function handleClickOutside(event) {
     if (
       newNoteElement.current &&
@@ -44,12 +45,18 @@ export function NewNote() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   });
+  /********************************* */
 
-  function inputHandler(event) {
-    setNote({ ...note, [event.target.dataset.name]: event.target.innerHTML });
-    if (event.key === "Backspace" && event.target.textContent === "") {
+  function inputKeyDownHandler(event) {
+    if (event.key === "Enter" && event.target.dataset.name === "title") {
+      event.preventDefault();
+    }
+  }
+  function inputKeyUpHandler(event) {
+    if (event.target.textContent === "") {
       event.target.innerHTML = "";
     }
+    setNote({ ...note, [event.target.dataset.name]: event.target.innerHTML });
   }
 
   function saveNote() {
@@ -73,7 +80,8 @@ export function NewNote() {
         aria-label="Title"
         spellCheck="true"
         ref={titleInput}
-        onKeyUp={inputHandler}
+        onKeyDown={inputKeyDownHandler}
+        onKeyUp={inputKeyUpHandler}
       ></div>
       <div
         contentEditable="true"
@@ -85,7 +93,8 @@ export function NewNote() {
         data-name="text"
         spellCheck="true"
         onClick={openNoteEditor}
-        onKeyUp={inputHandler}
+        onKeyDown={inputKeyDownHandler}
+        onKeyUp={inputKeyUpHandler}
       ></div>
       <div className="note-tools" ref={noteTools}>
         <button onClick={saveNote}>save</button>
