@@ -1,7 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { useRequest } from "../../hooks/request";
+import { AuthContext } from "../../context/AuthContext";
 import "./NewNote.scss";
 
 export function NewNote() {
+  const { userToken } = useContext(AuthContext);
+  const { request, error } = useRequest();
+
   const newNoteElement = useRef(null);
   const titleInput = useRef(null);
   const noteTools = useRef(null);
@@ -65,7 +70,10 @@ export function NewNote() {
       title: innerHTMLtoStr(note.title),
       text: innerHTMLtoStr(note.text)
     };
-    // post request...
+
+    request("/api/notes/create", "POST", newNote, {
+      auth: `Bearer ${userToken}`
+    });
   }
 
   return (

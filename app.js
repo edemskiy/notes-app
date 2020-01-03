@@ -8,7 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use("/api/auth", require("./routes/auth.route"));
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/notes", require("./routes/notes.routes"));
 
 mongoose
   .connect(process.env.MONGODB_URI, {
