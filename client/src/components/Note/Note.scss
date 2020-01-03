@@ -1,0 +1,21 @@
+.note {
+  margin: 10px;
+  width: 100%;
+  max-width: 240px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+
+  @media screen and (max-width: 560px) {
+    max-width: none;
+  }
+
+  .title {
+    padding: 10px 14px;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .text {
+    padding: 12px 16px;
+  }
+}
