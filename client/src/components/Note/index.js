@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./Note.scss";
 
@@ -14,8 +14,13 @@ const colors = {
 };
 
 export function Note({ note }) {
+  const [noteColor, setNoteColor] = useState(note.color);
+  function pickColor(e) {
+    setNoteColor(e.target.dataset.color);
+    //TODO update note request...
+  }
   return (
-    <div className="note-card">
+    <div className="note-card" style={{ backgroundColor: noteColor }}>
       <div className="note-title">{note.title}</div>
 
       <div className="note-text">
@@ -33,7 +38,12 @@ export function Note({ note }) {
         </div>
         <div className="color-palette">
           {Object.keys(colors).map((color, i) => (
-            <div key={i} style={{ backgroundColor: colors[color] }}></div>
+            <div
+              key={i}
+              data-color={color}
+              style={{ backgroundColor: colors[color] }}
+              onClick={pickColor}
+            ></div>
           ))}
         </div>
         <div className="delete-btn">
