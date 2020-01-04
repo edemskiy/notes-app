@@ -16,7 +16,7 @@ const colors = {
 export function Note({ note }) {
   const [noteColor, setNoteColor] = useState(note.color);
   function pickColor(e) {
-    setNoteColor(e.target.dataset.color);
+    setNoteColor(colors[e.target.dataset.color]);
     //TODO update note request...
   }
   return (
