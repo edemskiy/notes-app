@@ -24,9 +24,9 @@ export default function NotesPage() {
 
   return (
     <Container>
-      <NewNote />
+      <NewNote fetchNotes={fetchNotes} />
       <div className="notes">
-        {notes.map(note => (
+        {notes.reverse().map(note => (
           <Note key={note._id} note={note} />
         ))}
       </div>
