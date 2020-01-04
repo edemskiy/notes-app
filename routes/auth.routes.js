@@ -75,10 +75,7 @@ router.post(
 
       const token = jwt.sign(
         { userId: user.id },
-        process.env.NOTES_APP_PRIVATE_KEY,
-        {
-          expiresIn: "1h"
-        }
+        process.env.NOTES_APP_PRIVATE_KEY
       );
 
       res.json({ userToken: token, userId: user.id });
