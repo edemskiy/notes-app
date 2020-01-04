@@ -1,3 +1,5 @@
+$tools-color: #5f6368;
+
 .note-card {
   position: relative;
   margin: 10px;
@@ -28,14 +30,57 @@
     transition: 0.5s ease;
   }
   .note-tools {
+    margin: 5px 0;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     transition: 0.5s ease;
+    color: $tools-color;
 
     > * {
-      padding: 10px;
+      padding: 5px 10px;
+
+      &:hover {
+        color: #000;
+        border-radius: 5px;
+        background-color: #f1f3f4;
+      }
+    }
+
+    .color-palette {
+      position: absolute;
+      bottom: 35px;
+      width: 150px;
+      padding: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      opacity: 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0px 2px 3px 1px rgba(0, 0, 0, 0.1);
+      transition: 0.5s ease;
+      > * {
+        padding: 10px;
+        margin: 5px;
+        border: 2px solid #e0e0e0;
+        border-radius: 50%;
+        &:hover {
+          border-color: #000;
+        }
+      }
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    .color-picker {
+      position: relative;
+      &:hover + .color-palette {
+        opacity: 1;
+      }
     }
   }
 
