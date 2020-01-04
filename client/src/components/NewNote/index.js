@@ -3,19 +3,22 @@ import { useRequest } from "../../hooks/request";
 import { AuthContext } from "../../context/AuthContext";
 import "./NewNote.scss";
 
-export function NewNote() {
+const initialState = {
+  title: "",
+  text: "",
+  color: "white",
+  labels: []
+};
+
+export function NewNote({ fetchNotes }) {
   const { userToken } = useContext(AuthContext);
   const { request, error } = useRequest();
 
   const newNoteElement = useRef(null);
   const titleInput = useRef(null);
+  const textInput = useRef(null);
   const noteTools = useRef(null);
-  const [note, setNote] = useState({
-    title: "",
-    text: "",
-    color: "white",
-    labels: []
-  });
+  const [note, setNote] = useState(initialState);
 
   function innerHTMLtoStr(s) {
     return s
@@ -34,6 +37,11 @@ export function NewNote() {
       block.current.style.display = "none";
     });
   }
+  function clearNoteEditor() {
+    setNote(initialState);
+    titleInput.current.innerHTML = "";
+    textInput.current.innerHTML = "";
+  }
 
   /* close editor on outside click */
   function handleClickOutside(event) {
@@ -41,7 +49,7 @@ export function NewNote() {
       newNoteElement.current &&
       !newNoteElement.current.contains(event.target)
     ) {
-      closeNoteEditor();
+      saveNote();
     }
   }
   useEffect(() => {
@@ -65,6 +73,11 @@ export function NewNote() {
   }
 
   function saveNote() {
+    closeNoteEditor();
+
+    if (!note.title && !note.text) {
+      return;
+    }
     const newNote = {
       ...note,
       title: innerHTMLtoStr(note.title),
@@ -73,6 +86,9 @@ export function NewNote() {
 
     request("/api/notes/create", "POST", newNote, {
       auth: `Bearer ${userToken}`
+    }).then(() => {
+      clearNoteEditor();
+      fetchNotes();
     });
   }
 
@@ -101,6 +117,7 @@ export function NewNote() {
         data-name="text"
         spellCheck="true"
         onClick={openNoteEditor}
+        ref={textInput}
         onKeyDown={inputKeyDownHandler}
         onKeyUp={inputKeyUpHandler}
       ></div>
