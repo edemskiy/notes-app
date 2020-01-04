@@ -7,8 +7,8 @@ const noteSchema = new Schema({
   color: { type: String },
   createdAt: { type: Date },
   editedAt: { type: Date },
-  trashedAt: { type: Date, default: new Date(0) },
-  pinned: { type: Boolean, default: false },
+  isTrashed: { type: Boolean, default: false },
+  isPinned: { type: Boolean, default: false },
   owner: { type: Types.ObjectId, ref: "User" }
 });
 
