@@ -55,7 +55,7 @@ $tools-color: #5f6368;
       padding: 5px;
       display: flex;
       flex-wrap: wrap;
-      opacity: 0;
+      visibility: hidden;
       border: 1px solid #e0e0e0;
       border-radius: 5px;
       background-color: #fff;
@@ -72,14 +72,14 @@ $tools-color: #5f6368;
       }
 
       &:hover {
-        opacity: 1;
+        visibility: visible;
       }
     }
 
     .color-picker {
       position: relative;
       &:hover + .color-palette {
-        opacity: 1;
+        visibility: visible;
       }
     }
   }
