@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { useRequest } from "../../hooks/request";
 import "./Note.scss";
 
 const colors = {
@@ -13,12 +14,21 @@ const colors = {
   grey: "grey"
 };
 
-export function Note({ note }) {
+export function Note({ note, fetchNotes }) {
+  const { request } = useRequest();
+  const { userToken } = useContext(AuthContext);
   const [noteColor, setNoteColor] = useState(note.color);
   function pickColor(e) {
     setNoteColor(colors[e.target.dataset.color]);
     //TODO update note request...
   }
+
+  function deleteNote() {
+    request(`/api/notes/delete/${note._id}`, "DELETE", null, {
+      auth: `Bearer ${userToken}`
+    }).then(() => fetchNotes());
+  }
+
   return (
     <div className="note-card" style={{ backgroundColor: noteColor }}>
       <div className="note-title">{note.title}</div>
@@ -46,7 +56,7 @@ export function Note({ note }) {
             ></div>
           ))}
         </div>
-        <div className="delete-btn">
+        <div className="delete-btn" onClick={deleteNote}>
           <i className="fas fa-trash"></i>
         </div>
       </div>

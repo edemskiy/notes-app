@@ -31,4 +31,12 @@ router.get("/", auth, (req, res) => {
     );
 });
 
+router.delete("/delete/:id", auth, (req, res) => {
+  Note.deleteOne({ owner: req.userId, _id: req.params.id })
+    .then(() => res.status(200).json({ message: "Note deleted" }))
+    .catch(err =>
+      res.status(500).json({ message: "Server error. Try again later" })
+    );
+});
+
 module.exports = router;
