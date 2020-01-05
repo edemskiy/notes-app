@@ -31,6 +31,22 @@ router.get("/", auth, (req, res) => {
     );
 });
 
+router.put("/update/:id", auth, (req, res) => {
+  Note.findById(req.params.id)
+    .then(note => {
+      if (note.owner.toString() !== req.userId) {
+        throw new Error("Permission denied");
+      }
+      return Note.findByIdAndUpdate(req.params.id, req.body);
+    })
+    .then(note =>
+      res.status(200).json({ message: "Updated succesfully", note })
+    )
+    .catch(err =>
+      res.status(500).json({ message: "Server error. Try again later" })
+    );
+});
+
 router.delete("/delete/:id", auth, (req, res) => {
   Note.deleteOne({ owner: req.userId, _id: req.params.id })
     .then(() => res.status(200).json({ message: "Note deleted" }))
