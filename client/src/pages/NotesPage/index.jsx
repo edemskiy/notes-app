@@ -26,9 +26,18 @@ export default function NotesPage() {
     <Container>
       <NewNote fetchNotes={fetchNotes} />
       <div className="notes">
-        {notes.reverse().map(note => (
-          <Note key={note._id} note={note} fetchNotes={fetchNotes} />
-        ))}
+        {notes
+          .filter(note => !note.isTrashed)
+          .reverse()
+          .map(note => (
+            <Note
+              key={note._id}
+              note={note}
+              fetchNotes={fetchNotes}
+              notes={notes}
+              setNotes={setNotes}
+            />
+          ))}
       </div>
     </Container>
   );
