@@ -1,36 +1,59 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useRequest } from "../../hooks/request";
 import "./Note.scss";
 
 const colors = {
-  white: "white",
-  red: "red",
-  blue: "blue",
-  green: "green",
-  purple: "purple",
-  pink: "pink",
-  yellow: "yellow",
-  grey: "grey"
+  white: "#fff",
+  red: "#f28b82",
+  blue: "#aecbfa",
+  green: "#ccff90",
+  purple: "#d7aefb",
+  pink: "#fdcfe8",
+  yellow: "#fff475",
+  grey: "#e8eaed"
 };
 
-export function Note({ note, fetchNotes }) {
-  const { request } = useRequest();
+export function Note({ note, notes, setNotes }) {
+  const { request, error } = useRequest();
   const { userToken } = useContext(AuthContext);
-  const [noteColor, setNoteColor] = useState(note.color);
-  function pickColor(e) {
-    setNoteColor(colors[e.target.dataset.color]);
-    //TODO update note request...
+
+  useEffect(() => {
+    if (error) console.log(error);
+    //TODO show popup message instead
+  }, [error]);
+
+  function changeNoteState(newState) {
+    setNotes(
+      notes.map(noteFromList => {
+        return noteFromList._id !== note._id
+          ? noteFromList
+          : { ...note, ...newState };
+      })
+    );
+  }
+  function changeBackgroundColor(event) {
+    changeNoteState({ color: event.target.dataset.color });
+    request(
+      `/api/notes/update/${note._id}`,
+      "PUT",
+      { color: event.target.dataset.color },
+      { auth: `Bearer ${userToken}` }
+    );
   }
 
   function deleteNote() {
-    request(`/api/notes/delete/${note._id}`, "DELETE", null, {
-      auth: `Bearer ${userToken}`
-    }).then(() => fetchNotes());
+    changeNoteState({ isTrashed: true });
+    request(
+      `/api/notes/update/${note._id}`,
+      "PUT",
+      { isTrashed: true },
+      { auth: `Bearer ${userToken}` }
+    );
   }
 
   return (
-    <div className="note-card" style={{ backgroundColor: noteColor }}>
+    <div className="note-card" style={{ backgroundColor: colors[note.color] }}>
       <div className="note-title">{note.title}</div>
 
       <div className="note-text">
@@ -52,7 +75,7 @@ export function Note({ note, fetchNotes }) {
               key={i}
               data-color={color}
               style={{ backgroundColor: colors[color] }}
-              onClick={pickColor}
+              onClick={changeBackgroundColor}
             ></div>
           ))}
         </div>
