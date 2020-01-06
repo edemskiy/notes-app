@@ -6,11 +6,14 @@ import { useRequest } from "../../hooks/request";
 
 import { Container } from "@material-ui/core";
 import "./NotesPage.scss";
+import { NoteEditor } from "../../components/NoteEditor";
 
 export default function NotesPage() {
   const { userToken } = useContext(AuthContext);
   const { request, error } = useRequest();
   const [notes, setNotes] = useState([]);
+  const [isEditorOpen, setEditorOpen] = useState(false);
+  const [noteToEdit, setNoteToEdit] = useState({});
 
   function changeNote({ _id, ...newProperties }) {
     setNotes(
@@ -30,6 +33,16 @@ export default function NotesPage() {
     fetchNotes();
   }, [fetchNotes]);
 
+  function openNoteEditor(note) {
+    setEditorOpen(true);
+    setNoteToEdit(note);
+  }
+
+  function closeNoteEditor() {
+    setEditorOpen(false);
+    setNoteToEdit({});
+  }
+
   return (
     <Container>
       <NewNote fetchNotes={fetchNotes} />
@@ -38,9 +51,18 @@ export default function NotesPage() {
           .filter(note => !note.isTrashed)
           .reverse()
           .map(note => (
-            <Note key={note._id} note={note} changeNote={changeNote} />
+            <Note
+              openNoteEditor={openNoteEditor.bind(null, note)}
+              key={note._id}
+              note={note}
+              changeNote={changeNote}
+            />
           ))}
       </div>
+
+      {isEditorOpen && (
+        <NoteEditor note={noteToEdit} closeNoteEditor={closeNoteEditor} />
+      )}
     </Container>
   );
 }
