@@ -34,7 +34,7 @@ export default function InfoMessage(props) {
       }}
       open={props.visible}
       onClose={props.onClose}
-      autoHideDuration={50000}
+      autoHideDuration={5000}
     >
       <SnackbarContent
         className={classes[props.variant || "info"]}
