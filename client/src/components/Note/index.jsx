@@ -14,7 +14,7 @@ const colors = {
   grey: "#e8eaed"
 };
 
-export function Note({ note, changeNote }) {
+export function Note({ note, changeNote, openNoteEditor }) {
   const { request, error } = useRequest();
   const { userToken } = useContext(AuthContext);
 
@@ -45,9 +45,11 @@ export function Note({ note, changeNote }) {
 
   return (
     <div className="note-card" style={{ backgroundColor: colors[note.color] }}>
-      <div className="note-title">{note.title}</div>
+      <div className="note-title" onClick={openNoteEditor}>
+        {note.title}
+      </div>
 
-      <div className="note-text">
+      <div className="note-text" onClick={openNoteEditor}>
         {note.text.split("\n").map((line, i) => (
           <div key={i}>{line}</div>
         ))}
