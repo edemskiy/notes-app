@@ -14,7 +14,7 @@ const colors = {
   grey: "#e8eaed"
 };
 
-export function Note({ note, notes, setNotes }) {
+export function Note({ note, changeNote }) {
   const { request, error } = useRequest();
   const { userToken } = useContext(AuthContext);
 
@@ -23,17 +23,8 @@ export function Note({ note, notes, setNotes }) {
     //TODO show popup message instead
   }, [error]);
 
-  function changeNoteState(newState) {
-    setNotes(
-      notes.map(noteFromList => {
-        return noteFromList._id !== note._id
-          ? noteFromList
-          : { ...note, ...newState };
-      })
-    );
-  }
   function changeBackgroundColor(event) {
-    changeNoteState({ color: event.target.dataset.color });
+    changeNote({ _id: note._id, color: event.target.dataset.color });
     request(
       `/api/notes/update/${note._id}`,
       "PUT",
@@ -43,7 +34,7 @@ export function Note({ note, notes, setNotes }) {
   }
 
   function deleteNote() {
-    changeNoteState({ isTrashed: true });
+    changeNote({ _id: note._id, isTrashed: true });
     request(
       `/api/notes/update/${note._id}`,
       "PUT",

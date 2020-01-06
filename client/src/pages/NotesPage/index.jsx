@@ -12,6 +12,14 @@ export default function NotesPage() {
   const { request, error } = useRequest();
   const [notes, setNotes] = useState([]);
 
+  function changeNote({ _id, ...newProperties }) {
+    setNotes(
+      notes.map(note => {
+        return note._id !== _id ? note : { ...note, ...newProperties };
+      })
+    );
+  }
+
   const fetchNotes = useCallback(() => {
     request("/api/notes", "GET", null, {
       auth: `Bearer ${userToken}`
@@ -30,13 +38,7 @@ export default function NotesPage() {
           .filter(note => !note.isTrashed)
           .reverse()
           .map(note => (
-            <Note
-              key={note._id}
-              note={note}
-              fetchNotes={fetchNotes}
-              notes={notes}
-              setNotes={setNotes}
-            />
+            <Note key={note._id} note={note} changeNote={changeNote} />
           ))}
       </div>
     </Container>
