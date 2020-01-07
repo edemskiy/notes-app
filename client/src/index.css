@@ -10,3 +10,10 @@
 body {
   font-family: Roboto, Helvetica, Arial, sans-serif;
 }
+
+.opacity-0 {
+  opacity: 0;
+}
+.opacity-1 {
+  opacity: 1;
+}
