@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { useRequest } from "../../hooks/request";
 import { AuthContext } from "../../context/AuthContext";
+import { NoteTools } from "../NoteTools";
+import { noteColors } from "../../constants/note";
 import "./NewNote.scss";
 
 const initialState = {
@@ -10,15 +12,16 @@ const initialState = {
   labels: []
 };
 
-export function NewNote({ fetchNotes }) {
+export function NewNote({ addNote }) {
   const { userToken } = useContext(AuthContext);
   const { request, error } = useRequest();
 
   const newNoteElement = useRef(null);
   const titleInput = useRef(null);
   const textInput = useRef(null);
-  const noteTools = useRef(null);
+
   const [note, setNote] = useState(initialState);
+  const [isNoteEditorOpen, setEditorOpen] = useState(false);
 
   function innerHTMLtoStr(s) {
     return s
@@ -28,15 +31,13 @@ export function NewNote({ fetchNotes }) {
   }
 
   function openNoteEditor() {
-    [titleInput, noteTools].forEach(block => {
-      block.current.style.display = "block";
-    });
+    setEditorOpen(true);
   }
+
   function closeNoteEditor() {
-    [titleInput, noteTools].forEach(block => {
-      block.current.style.display = "none";
-    });
+    setEditorOpen(false);
   }
+
   function clearNoteEditor() {
     setNote(initialState);
     titleInput.current.innerHTML = "";
@@ -72,10 +73,13 @@ export function NewNote({ fetchNotes }) {
     setNote({ ...note, [event.target.dataset.name]: event.target.innerHTML });
   }
 
-  function saveNote() {
-    closeNoteEditor();
+  function changeBackgroundColor(color) {
+    setNote({ ...note, color });
+  }
 
+  function saveNote() {
     if (!note.title && !note.text) {
+      closeNoteEditor();
       return;
     }
     const newNote = {
@@ -86,27 +90,34 @@ export function NewNote({ fetchNotes }) {
 
     request("/api/notes/create", "POST", newNote, {
       auth: `Bearer ${userToken}`
-    }).then(() => {
+    }).then(res => {
       clearNoteEditor();
-      fetchNotes();
+      closeNoteEditor();
+      addNote(res.note);
     });
   }
 
   return (
-    <div className="new-note" ref={newNoteElement}>
-      <div
-        contentEditable="true"
-        aria-multiline="false"
-        role="textbox"
-        tabIndex="1"
-        data-name="title"
-        className="note-title"
-        aria-label="Title"
-        spellCheck="true"
-        ref={titleInput}
-        onKeyDown={inputKeyDownHandler}
-        onKeyUp={inputKeyUpHandler}
-      ></div>
+    <div
+      className="new-note"
+      ref={newNoteElement}
+      style={{ backgroundColor: noteColors[note.color] }}
+    >
+      {isNoteEditorOpen && (
+        <div
+          contentEditable="true"
+          aria-multiline="false"
+          role="textbox"
+          tabIndex="1"
+          data-name="title"
+          className="note-title"
+          aria-label="Title"
+          spellCheck="true"
+          ref={titleInput}
+          onKeyDown={inputKeyDownHandler}
+          onKeyUp={inputKeyUpHandler}
+        ></div>
+      )}
       <div
         contentEditable="true"
         aria-multiline="true"
@@ -121,9 +132,7 @@ export function NewNote({ fetchNotes }) {
         onKeyDown={inputKeyDownHandler}
         onKeyUp={inputKeyUpHandler}
       ></div>
-      <div className="note-tools" ref={noteTools}>
-        <button onClick={saveNote}>save</button>
-      </div>
+      {isNoteEditorOpen && <NoteTools onColorPick={changeBackgroundColor} />}
     </div>
   );
 }

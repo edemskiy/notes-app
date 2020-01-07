@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback, useContext, useState } from "react";
 import { NewNote } from "../../components/NewNote";
 import { Note } from "../../components/Note";
+import { NoteEditor } from "../../components/NoteEditor";
 import { AuthContext } from "../../context/AuthContext";
 import { useRequest } from "../../hooks/request";
 
 import { Container } from "@material-ui/core";
 import "./NotesPage.scss";
-import { NoteEditor } from "../../components/NoteEditor";
 
 export default function NotesPage() {
   const { userToken } = useContext(AuthContext);
@@ -21,6 +21,10 @@ export default function NotesPage() {
         return note._id !== _id ? note : { ...note, ...newProperties };
       })
     );
+  }
+
+  function addNote(note) {
+    setNotes([...notes, note]);
   }
 
   const fetchNotes = useCallback(() => {
@@ -45,7 +49,7 @@ export default function NotesPage() {
 
   return (
     <Container>
-      <NewNote fetchNotes={fetchNotes} />
+      <NewNote addNote={addNote} />
       <div className="notes">
         {notes
           .filter(note => !note.isTrashed)
