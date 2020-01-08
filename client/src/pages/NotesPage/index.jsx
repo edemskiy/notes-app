@@ -15,6 +15,8 @@ export default function NotesPage() {
   const [isEditorOpen, setEditorOpen] = useState(false);
   const [noteToEdit, setNoteToEdit] = useState({});
 
+  useEffect(() => console.log(notes), [notes]);
+
   function changeNote({ _id, ...newProperties }) {
     setNotes(
       notes.map(note => {
@@ -65,7 +67,15 @@ export default function NotesPage() {
       </div>
 
       {isEditorOpen && (
-        <NoteEditor note={noteToEdit} closeNoteEditor={closeNoteEditor} />
+        <div className="modal-back">
+          <NoteEditor
+            note={noteToEdit}
+            setNote={changeNote}
+            fillContent={true}
+            closeNoteEditor={closeNoteEditor}
+            onNoteSave={() => null}
+          />
+        </div>
       )}
     </Container>
   );
