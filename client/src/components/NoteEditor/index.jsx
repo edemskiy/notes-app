@@ -4,7 +4,7 @@ import { emptyNote } from "../../states/note";
 import { noteColors } from "../../constants/note";
 import "./NoteEditor.scss";
 
-function NoteEditorComponent({
+export function NoteEditor({
   note,
   hideTitleAndTools,
   onOutsideClick,
@@ -21,6 +21,7 @@ function NoteEditorComponent({
   }
   function closeNoteEditor() {
     setHideFields(true);
+    setNoteCopy(emptyNote);
     onOutsideClick && onOutsideClick();
   }
 
@@ -40,7 +41,8 @@ function NoteEditorComponent({
   function handleClickOutside(event) {
     if (
       newNoteElement.current &&
-      !newNoteElement.current.contains(event.target)
+      !newNoteElement.current.contains(event.target) &&
+      !hideFields
     ) {
       saveNote();
     }
@@ -125,4 +127,4 @@ function NoteEditorComponent({
   );
 }
 
-export const NoteEditor = React.memo(NoteEditorComponent, () => true);
+// export const NoteEditor = React.memo(NoteEditorComponent, () => true);
