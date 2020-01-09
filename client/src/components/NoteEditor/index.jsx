@@ -1,21 +1,28 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { NoteTools } from "../NoteTools";
-
+import { emptyNote } from "../../states/note";
 import { noteColors } from "../../constants/note";
 import "./NoteEditor.scss";
 
-export function NoteEditor({
+function NoteEditorComponent({
   note,
-  setNote,
   hideTitleAndTools,
-  fillContent,
-  openFullEditor,
-  closeNoteEditor,
+  onOutsideClick,
   onNoteSave
 }) {
+  const [noteCopy, setNoteCopy] = useState(note || emptyNote);
+  const [hideFields, setHideFields] = useState(!!hideTitleAndTools);
   const newNoteElement = useRef(null);
   const titleInput = useRef(null);
   const textInput = useRef(null);
+
+  function openFullEditor() {
+    setHideFields(false);
+  }
+  function closeNoteEditor() {
+    setHideFields(true);
+    onOutsideClick && onOutsideClick();
+  }
 
   function innerHTMLtoStr(s) {
     return s
@@ -35,7 +42,6 @@ export function NoteEditor({
       newNoteElement.current &&
       !newNoteElement.current.contains(event.target)
     ) {
-      clearNoteEditor();
       saveNote();
     }
   }
@@ -56,28 +62,29 @@ export function NoteEditor({
     if (event.target.textContent === "") {
       event.target.innerHTML = "";
     }
-    setNote({
-      ...note,
+    setNoteCopy({
+      ...noteCopy,
       [event.target.dataset.name]: innerHTMLtoStr(event.target.innerHTML)
     });
   }
 
   function changeBackgroundColor(color) {
-    setNote({ ...note, color });
+    setNoteCopy({ ...noteCopy, color });
   }
 
   function saveNote() {
+    onNoteSave(noteCopy);
+    clearNoteEditor();
     closeNoteEditor();
-    onNoteSave();
   }
 
   return (
     <div
       className="note-editor"
       ref={newNoteElement}
-      style={{ backgroundColor: noteColors[note.color] }}
+      style={{ backgroundColor: noteColors[noteCopy.color] }}
     >
-      {!hideTitleAndTools && (
+      {!hideFields && (
         <div
           contentEditable="true"
           suppressContentEditableWarning="true"
@@ -92,7 +99,7 @@ export function NoteEditor({
           onKeyDown={inputKeyDownHandler}
           onKeyUp={inputKeyUpHandler}
         >
-          {fillContent && note.title}
+          {note && note.title}
         </div>
       )}
       <div
@@ -110,10 +117,12 @@ export function NoteEditor({
         onKeyDown={inputKeyDownHandler}
         onKeyUp={inputKeyUpHandler}
       >
-        {fillContent &&
+        {note &&
           note.text.split("\n").map((line, i) => <div key={i}>{line}</div>)}
       </div>
-      {!hideTitleAndTools && <NoteTools onColorPick={changeBackgroundColor} />}
+      {!hideFields && <NoteTools onColorPick={changeBackgroundColor} />}
     </div>
   );
 }
+
+export const NoteEditor = React.memo(NoteEditorComponent, () => true);

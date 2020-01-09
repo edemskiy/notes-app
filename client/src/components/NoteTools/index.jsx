@@ -2,9 +2,9 @@ import React from "react";
 import { noteColors } from "../../constants/note";
 import "./NoteTools.scss";
 
-export function NoteTools({ isHidden, onColorPick, deleteNote }) {
+export function NoteTools({ hidden, onColorPick, deleteNote }) {
   return (
-    <div className={"note-tools " + (isHidden ? "opacity-0" : "opacity-1")}>
+    <div className={"note-tools " + (hidden ? "opacity-0" : "opacity-1")}>
       {onColorPick && (
         <>
           <div className="color-picker-btn">

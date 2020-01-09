@@ -5,7 +5,7 @@ import "./Note.scss";
 import { NoteTools } from "../NoteTools";
 import { noteColors } from "../../constants/note";
 
-export function Note({ note, changeNote, openNoteEditor }) {
+export function Note({ note, changeNote, openNoteEditor, hidden }) {
   const { request, error } = useRequest();
   const { userToken } = useContext(AuthContext);
   const [isToolsHidden, setToolsHidden] = useState(true);
@@ -43,7 +43,7 @@ export function Note({ note, changeNote, openNoteEditor }) {
 
   return (
     <div
-      className="note-card"
+      className={"note-card " + (hidden ? "opacity-0" : "opacity-1")}
       style={{ backgroundColor: noteColors[note.color] }}
       onMouseEnter={showTools}
       onMouseLeave={hideTools}
@@ -59,7 +59,7 @@ export function Note({ note, changeNote, openNoteEditor }) {
       </div>
 
       <NoteTools
-        isHidden={isToolsHidden}
+        hidden={isToolsHidden}
         onColorPick={changeBackgroundColor}
         deleteNote={deleteNote}
       />
