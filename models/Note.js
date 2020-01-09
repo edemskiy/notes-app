@@ -1,12 +1,12 @@
 const { Schema, Types, model } = require("mongoose");
 
 const noteSchema = new Schema({
-  title: { type: String },
-  text: { type: String },
+  title: { type: String, default: "" },
+  text: { type: String, default: "" },
   labels: [{ type: String }],
-  color: { type: String },
-  createdAt: { type: Date },
-  editedAt: { type: Date },
+  color: { type: String, default: "white" },
+  createdAt: { type: Date, default: Date.now() },
+  editedAt: { type: Date, default: Date.now() },
   isTrashed: { type: Boolean, default: false },
   isPinned: { type: Boolean, default: false },
   owner: { type: Types.ObjectId, ref: "User" }
