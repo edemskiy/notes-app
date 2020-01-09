@@ -12,11 +12,10 @@ router.post("/create", auth, (req, res) => {
     createdAt: currentDate,
     editedAt: currentDate
   });
-  console.log("create");
+
   newNote
     .save()
     .then(note => {
-      console.log(note);
       res.status(201).json({ note });
     })
     .catch(err => {
