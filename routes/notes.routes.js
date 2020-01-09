@@ -6,16 +6,17 @@ const router = Router();
 
 router.post("/create", auth, (req, res) => {
   const currentDate = Date.now();
-  note = new Note({
+  newNote = new Note({
     ...req.body,
     owner: req.userId,
     createdAt: currentDate,
     editedAt: currentDate
   });
-
-  note
+  console.log("create");
+  newNote
     .save()
-    .then(() => {
+    .then(note => {
+      console.log(note);
       res.status(201).json({ note });
     })
     .catch(err => {

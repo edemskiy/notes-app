@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback, useContext, useState } from "react";
-import { NewNote } from "../../components/NewNote";
 import { Note } from "../../components/Note";
 import { NoteEditor } from "../../components/NoteEditor";
 import { AuthContext } from "../../context/AuthContext";
@@ -19,15 +18,18 @@ export default function NotesPage() {
     setNotes({ ...notes, [_id]: { ...notes[_id], ...newProperties } });
   }
 
-  function updateNote(newProperties) {
-    changeNote({ _id: activeNoteId, ...newProperties });
-  }
-
   function addNote(note) {
-    setNotes({ ...notes, [note._id]: note });
+    if (!note.title && !note.text) {
+      return;
+    }
+    request("/api/notes/create", "POST", note, {
+      auth: `Bearer ${userToken}`
+    }).then(res => {
+      setNotes({ ...notes, [res.note._id]: res.note });
+    });
   }
 
-  function saveNote(note) {
+  function updateNote(note) {
     changeNote(note);
     request(`/api/notes/update/${note._id}`, "PUT", note, {
       auth: `Bearer ${userToken}`
@@ -66,7 +68,8 @@ export default function NotesPage() {
 
   return (
     <Container>
-      <NewNote addNote={addNote} />
+      <NoteEditor onNoteSave={addNote} hideTitleAndTools={true} />
+
       <div className="notes">
         {Object.values(notes)
           .filter(note => !note.isTrashed)
@@ -86,9 +89,8 @@ export default function NotesPage() {
         <div className="modal-back">
           <NoteEditor
             note={notes[activeNoteId]}
-            setNote={updateNote}
             onOutsideClick={closeNoteEditor}
-            onNoteSave={saveNote}
+            onNoteSave={updateNote}
           />
         </div>
       )}
