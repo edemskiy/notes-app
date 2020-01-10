@@ -2,7 +2,7 @@ import React from "react";
 import { noteColors } from "../../constants/note";
 import "./NoteTools.scss";
 
-export function NoteTools({ hidden, onColorPick, deleteNote }) {
+export function NoteTools({ hidden, onColorPick, onDeleteNote }) {
   return (
     <div className={"note-tools " + (hidden ? "opacity-0" : "opacity-1")}>
       {onColorPick && (
@@ -24,8 +24,8 @@ export function NoteTools({ hidden, onColorPick, deleteNote }) {
         </>
       )}
 
-      {deleteNote && (
-        <i className="delete-btn" onClick={deleteNote}>
+      {onDeleteNote && (
+        <i className="delete-btn" onClick={onDeleteNote}>
           <i className="fas fa-trash"></i>
         </i>
       )}
