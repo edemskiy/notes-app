@@ -65,4 +65,10 @@
     right: 5px;
     padding: 5px;
   }
+  .pinned {
+    color: #f0a94e;
+    &:hover {
+      color: #ff8300;
+    }
+  }
 }

@@ -2,7 +2,17 @@ import React from "react";
 import { noteColors } from "../../constants/note";
 import "./NoteTools.scss";
 
-export function NoteTools({ hidden, onColorPick, onDeleteNote }) {
+export function NoteTools({ hidden, note, updateNote, onDeleteNote }) {
+  function onColorPick(color) {
+    updateNote({ ...note, color });
+  }
+  function onDeleteClick() {
+    updateNote({ ...note, isTrashed: true });
+    onDeleteNote && onDeleteNote();
+  }
+  function onPinClick() {
+    updateNote({ ...note, isPinned: !note.isPinned });
+  }
   return (
     <div className={"note-tools " + (hidden ? "opacity-0" : "opacity-1")}>
       {onColorPick && (
@@ -17,20 +27,23 @@ export function NoteTools({ hidden, onColorPick, onDeleteNote }) {
                 key={i}
                 data-color={color}
                 style={{ backgroundColor: noteColors[color] }}
-                onClick={onColorPick.bind(null, color) || (() => null)}
+                onClick={onColorPick.bind(null, color)}
               ></div>
             ))}
           </div>
         </>
       )}
 
-      {onDeleteNote && (
-        <i className="delete-btn" onClick={onDeleteNote}>
+      {note && (
+        <i className="delete-btn" onClick={onDeleteClick}>
           <i className="fas fa-trash"></i>
         </i>
       )}
 
-      <div className="pin-btn">
+      <div
+        className={"pin-btn " + (note.isPinned ? "pinned" : "")}
+        onClick={onPinClick}
+      >
         <i className="fas fa-thumbtack"></i>
       </div>
     </div>
