@@ -19,6 +19,9 @@
 
   .note-content {
     height: 100%;
+    &:hover {
+      cursor: text;
+    }
   }
 
   .note-title {
