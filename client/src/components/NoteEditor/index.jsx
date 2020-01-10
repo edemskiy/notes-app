@@ -6,10 +6,9 @@ import "./NoteEditor.scss";
 
 export function NoteEditor({
   note,
-  hideTitleAndTools,
+  updateNote,
   onOutsideClick,
-  onNoteSave,
-  onDeleteNote
+  hideTitleAndTools
 }) {
   const [noteCopy, setNoteCopy] = useState(note || emptyNote);
   const [hideFields, setHideFields] = useState(!!hideTitleAndTools);
@@ -71,20 +70,15 @@ export function NoteEditor({
       [event.target.dataset.name]: innerHTMLtoStr(event.target.innerHTML)
     });
   }
-
-  function changeBackgroundColor(color) {
-    setNoteCopy({ ...noteCopy, color });
-  }
-
   function saveNote() {
-    onNoteSave(noteCopy);
+    updateNote(noteCopy);
     closeNoteEditor();
   }
-
-  function deleteNote() {
-    onDeleteNote(note);
-    closeNoteEditor();
-  }
+  useEffect(() => {
+    if (noteCopy.isTrashed) {
+      saveNote();
+    }
+  }, [noteCopy]);
 
   return (
     <div
@@ -120,7 +114,7 @@ export function NoteEditor({
         tabIndex="2"
         data-name="text"
         spellCheck="true"
-        onClick={openFullEditor || function() {}}
+        onClick={openFullEditor}
         ref={textInput}
         onKeyDown={inputKeyDownHandler}
         onKeyUp={inputKeyUpHandler}
@@ -128,12 +122,7 @@ export function NoteEditor({
         {note &&
           note.text.split("\n").map((line, i) => <div key={i}>{line}</div>)}
       </div>
-      {!hideFields && (
-        <NoteTools
-          onColorPick={changeBackgroundColor}
-          onDeleteNote={onDeleteNote && deleteNote}
-        />
-      )}
+      {!hideFields && <NoteTools note={noteCopy} updateNote={setNoteCopy} />}
     </div>
   );
 }

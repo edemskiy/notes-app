@@ -1,16 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import { NoteTools } from "../NoteTools";
 import { noteColors } from "../../constants/note";
 
 import "./Note.scss";
 
-export function Note({
-  note,
-  changeBackgroundColor,
-  deleteNote,
-  openNoteEditor,
-  hidden
-}) {
+export function Note({ note, updateNote, openNoteEditor, hidden }) {
   const [isToolsHidden, setToolsHidden] = useState(true);
 
   function showTools() {
@@ -18,10 +12,6 @@ export function Note({
   }
   function hideTools() {
     setToolsHidden(true);
-  }
-
-  function onColorPick(color) {
-    changeBackgroundColor(note, color);
   }
 
   return (
@@ -41,11 +31,7 @@ export function Note({
         </div>
       </div>
 
-      <NoteTools
-        hidden={isToolsHidden}
-        onColorPick={onColorPick}
-        onDeleteNote={deleteNote.bind(null, note)}
-      />
+      <NoteTools note={note} updateNote={updateNote} hidden={isToolsHidden} />
     </div>
   );
 }
