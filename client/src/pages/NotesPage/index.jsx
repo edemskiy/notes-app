@@ -56,13 +56,6 @@ export default function NotesPage() {
     });
   }
 
-  function deleteNote(note) {
-    updateNote({ ...note, isTrashed: true });
-  }
-  function changeBackgroundColor(note, color) {
-    updateNote({ ...note, color });
-  }
-
   function openNoteEditor(noteId) {
     setEditorOpen(true);
     setactiveNoteId(noteId);
@@ -75,19 +68,33 @@ export default function NotesPage() {
 
   return (
     <Container>
-      <NoteEditor onNoteSave={addNote} hideTitleAndTools={true} />
+      <NoteEditor updateNote={addNote} hideTitleAndTools={true} />
 
-      <div className="notes">
+      <div className="notes pinned-notes">
         {Object.values(notes)
-          .filter(note => !note.isTrashed)
+          .filter(note => !note.isTrashed && note.isPinned)
           .reverse()
           .map(note => (
             <Note
               openNoteEditor={openNoteEditor.bind(null, note._id)}
               key={note._id}
               note={note}
-              changeBackgroundColor={changeBackgroundColor}
-              deleteNote={deleteNote}
+              updateNote={updateNote}
+              hidden={isEditorOpen && note._id === activeNoteId}
+            />
+          ))}
+      </div>
+
+      <div className="notes other-notes">
+        {Object.values(notes)
+          .filter(note => !note.isTrashed && !note.isPinned)
+          .reverse()
+          .map(note => (
+            <Note
+              openNoteEditor={openNoteEditor.bind(null, note._id)}
+              key={note._id}
+              note={note}
+              updateNote={updateNote}
               hidden={isEditorOpen && note._id === activeNoteId}
             />
           ))}
@@ -97,9 +104,8 @@ export default function NotesPage() {
         <div className="modal-back">
           <NoteEditor
             note={notes[activeNoteId]}
+            updateNote={updateNote}
             onOutsideClick={closeNoteEditor}
-            onNoteSave={updateNote}
-            onDeleteNote={deleteNote}
           />
         </div>
       )}

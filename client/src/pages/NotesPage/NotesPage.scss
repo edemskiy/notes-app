@@ -2,6 +2,23 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 50px;
+}
+
+.pinned-notes:not(:empty) {
+  &::before,
+  & + .other-notes::before {
+    color: #5f6368;
+    position: absolute;
+    margin-top: -15px;
+  }
+  &::before {
+    content: "pinned";
+  }
+
+  & + .other-notes::before {
+    content: "other";
+  }
 }
 
 .modal-back {
