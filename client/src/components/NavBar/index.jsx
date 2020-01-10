@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { SearchBar } from "../SearchBar";
 import "./NavBar.scss";
 
-export function NavBar() {
+export function NavBar({ setSearchPattern }) {
   const { logout } = useContext(AuthContext);
   return (
     <>
@@ -19,7 +19,7 @@ export function NavBar() {
             </a>
           </div>
           <div className="search-and-tools">
-            <SearchBar />
+            <SearchBar setSearchPattern={setSearchPattern} />
             <div className="tools">
               <button className="btn-logout" onClick={logout}>
                 Logout

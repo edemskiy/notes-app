@@ -30,6 +30,7 @@ $links-color: #5f6368;
 
 .menu-and-logo {
   min-width: 230px;
+  padding-right: 30px;
   display: flex;
   align-items: center;
   margin-right: auto;
@@ -51,6 +52,14 @@ $links-color: #5f6368;
     align-items: center;
     &:hover {
       cursor: pointer;
+    }
+  }
+}
+@media screen and (max-width: 560px) {
+  .menu-and-logo {
+    min-width: 0px;
+    & > .logo {
+      display: none;
     }
   }
 }

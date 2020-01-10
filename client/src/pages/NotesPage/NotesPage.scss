@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 50px;
 }
 
 .pinned-notes:not(:empty) {
@@ -16,8 +15,11 @@
     content: "pinned";
   }
 
-  & + .other-notes::before {
-    content: "other";
+  & + .other-notes:not(:empty) {
+    margin-top: 40px;
+    &::before {
+      content: "other";
+    }
   }
 }
 

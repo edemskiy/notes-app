@@ -8,12 +8,15 @@ import { NavBar } from "./components/NavBar";
 function App() {
   const { login, logout, userToken, userId, isReady } = useAuth();
   const isUserLoggedIn = !!userToken;
-  const routes = useRoutes(isUserLoggedIn);
+
+  const [searchPattern, setSearchPattern] = React.useState("");
+  const routes = useRoutes(isUserLoggedIn, searchPattern);
+
   return (
     <AuthContext.Provider
       value={{ login, logout, userToken, userId, isUserLoggedIn }}
     >
-      {isUserLoggedIn && <NavBar />}
+      {isUserLoggedIn && <NavBar setSearchPattern={setSearchPattern} />}
       <BrowserRouter>{routes}</BrowserRouter>
     </AuthContext.Provider>
   );

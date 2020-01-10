@@ -4,12 +4,12 @@ import { Switch, Redirect, Route } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import NotesPage from "./pages/NotesPage";
 
-export const useRoutes = isLogin => {
+export const useRoutes = (isLogin, searchPattern) => {
   if (isLogin) {
     return (
       <Switch>
         <Route path="/notes" exact>
-          <NotesPage />
+          <NotesPage searchPattern={searchPattern} />
         </Route>
         <Redirect to={"/notes"} />
       </Switch>

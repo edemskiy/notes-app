@@ -7,7 +7,7 @@ import { useRequest } from "../../hooks/request";
 import { Container } from "@material-ui/core";
 import "./NotesPage.scss";
 
-export default function NotesPage() {
+export default function NotesPage({ searchPattern }) {
   const { userToken } = useContext(AuthContext);
   const { request, error } = useRequest();
   const [notes, setNotes] = useState({});
@@ -72,7 +72,13 @@ export default function NotesPage() {
 
       <div className="notes pinned-notes">
         {Object.values(notes)
-          .filter(note => !note.isTrashed && note.isPinned)
+          .filter(
+            note =>
+              !note.isTrashed &&
+              note.isPinned &&
+              (note.title.toLowerCase().includes(searchPattern.toLowerCase()) ||
+                note.text.toLowerCase().includes(searchPattern.toLowerCase()))
+          )
           .reverse()
           .map(note => (
             <Note
@@ -87,7 +93,13 @@ export default function NotesPage() {
 
       <div className="notes other-notes">
         {Object.values(notes)
-          .filter(note => !note.isTrashed && !note.isPinned)
+          .filter(
+            note =>
+              !note.isTrashed &&
+              !note.isPinned &&
+              (note.title.toLowerCase().includes(searchPattern.toLowerCase()) ||
+                note.text.toLowerCase().includes(searchPattern.toLowerCase()))
+          )
           .reverse()
           .map(note => (
             <Note
