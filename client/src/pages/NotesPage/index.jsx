@@ -14,7 +14,27 @@ export default function NotesPage() {
   const [isEditorOpen, setEditorOpen] = useState(false);
   const [activeNoteId, setactiveNoteId] = useState(null);
 
-  function changeNote({ _id, ...newProperties }) {
+  const fetchNotes = useCallback(() => {
+    request("/api/notes", "GET", null, {
+      auth: `Bearer ${userToken}`
+    }).then(res => {
+      setNotes(
+        res.notes.reduce(
+          (notesMap, note) => ({
+            ...notesMap,
+            [note._id]: note
+          }),
+          Object.create(null)
+        )
+      );
+    });
+  }, [userToken, request]);
+
+  useEffect(() => {
+    fetchNotes();
+  }, [fetchNotes]);
+
+  function changeNoteState({ _id, ...newProperties }) {
     setNotes({ ...notes, [_id]: { ...notes[_id], ...newProperties } });
   }
 
@@ -30,31 +50,18 @@ export default function NotesPage() {
   }
 
   function updateNote(note) {
-    changeNote(note);
+    changeNoteState(note);
     request(`/api/notes/update/${note._id}`, "PUT", note, {
       auth: `Bearer ${userToken}`
     });
   }
 
-  const fetchNotes = useCallback(() => {
-    request("/api/notes", "GET", null, {
-      auth: `Bearer ${userToken}`
-    }).then(res => {
-      setNotes(
-        res.notes.reduce(
-          (notesMap, note) => ({
-            ...notesMap,
-            [note._id]: note
-          }),
-          {}
-        )
-      );
-    });
-  }, [userToken, request]);
-
-  useEffect(() => {
-    fetchNotes();
-  }, [fetchNotes]);
+  function deleteNote(note) {
+    updateNote({ ...note, isTrashed: true });
+  }
+  function changeBackgroundColor(note, color) {
+    updateNote({ ...note, color });
+  }
 
   function openNoteEditor(noteId) {
     setEditorOpen(true);
@@ -79,8 +86,9 @@ export default function NotesPage() {
               openNoteEditor={openNoteEditor.bind(null, note._id)}
               key={note._id}
               note={note}
+              changeBackgroundColor={changeBackgroundColor}
+              deleteNote={deleteNote}
               hidden={isEditorOpen && note._id === activeNoteId}
-              changeNote={changeNote}
             />
           ))}
       </div>
@@ -91,6 +99,7 @@ export default function NotesPage() {
             note={notes[activeNoteId]}
             onOutsideClick={closeNoteEditor}
             onNoteSave={updateNote}
+            onDeleteNote={deleteNote}
           />
         </div>
       )}

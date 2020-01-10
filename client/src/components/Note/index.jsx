@@ -1,19 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { useRequest } from "../../hooks/request";
-import "./Note.scss";
 import { NoteTools } from "../NoteTools";
 import { noteColors } from "../../constants/note";
 
-export function Note({ note, changeNote, openNoteEditor, hidden }) {
-  const { request, error } = useRequest();
-  const { userToken } = useContext(AuthContext);
-  const [isToolsHidden, setToolsHidden] = useState(true);
+import "./Note.scss";
 
-  useEffect(() => {
-    if (error) console.log(error);
-    //TODO show popup message instead
-  }, [error]);
+export function Note({
+  note,
+  changeBackgroundColor,
+  deleteNote,
+  openNoteEditor,
+  hidden
+}) {
+  const [isToolsHidden, setToolsHidden] = useState(true);
 
   function showTools() {
     setToolsHidden(false);
@@ -22,23 +20,8 @@ export function Note({ note, changeNote, openNoteEditor, hidden }) {
     setToolsHidden(true);
   }
 
-  function changeBackgroundColor(color) {
-    changeNote({ _id: note._id, color });
-    request(
-      `/api/notes/update/${note._id}`,
-      "PUT",
-      { color },
-      { auth: `Bearer ${userToken}` }
-    );
-  }
-
-  function deleteNote() {
-    request(
-      `/api/notes/update/${note._id}`,
-      "PUT",
-      { isTrashed: true },
-      { auth: `Bearer ${userToken}` }
-    ).then(res => changeNote({ _id: res.note._id, isTrashed: true }));
+  function onColorPick(color) {
+    changeBackgroundColor(note, color);
   }
 
   return (
@@ -60,8 +43,8 @@ export function Note({ note, changeNote, openNoteEditor, hidden }) {
 
       <NoteTools
         hidden={isToolsHidden}
-        onColorPick={changeBackgroundColor}
-        deleteNote={deleteNote}
+        onColorPick={onColorPick}
+        onDeleteNote={deleteNote.bind(null, note)}
       />
     </div>
   );

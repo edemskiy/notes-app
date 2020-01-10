@@ -8,7 +8,8 @@ export function NoteEditor({
   note,
   hideTitleAndTools,
   onOutsideClick,
-  onNoteSave
+  onNoteSave,
+  onDeleteNote
 }) {
   const [noteCopy, setNoteCopy] = useState(note || emptyNote);
   const [hideFields, setHideFields] = useState(!!hideTitleAndTools);
@@ -22,6 +23,7 @@ export function NoteEditor({
   function closeNoteEditor() {
     setHideFields(true);
     setNoteCopy(emptyNote);
+    clearNoteEditor();
     onOutsideClick && onOutsideClick();
   }
 
@@ -76,7 +78,11 @@ export function NoteEditor({
 
   function saveNote() {
     onNoteSave(noteCopy);
-    clearNoteEditor();
+    closeNoteEditor();
+  }
+
+  function deleteNote() {
+    onDeleteNote(note);
     closeNoteEditor();
   }
 
@@ -122,7 +128,12 @@ export function NoteEditor({
         {note &&
           note.text.split("\n").map((line, i) => <div key={i}>{line}</div>)}
       </div>
-      {!hideFields && <NoteTools onColorPick={changeBackgroundColor} />}
+      {!hideFields && (
+        <NoteTools
+          onColorPick={changeBackgroundColor}
+          onDeleteNote={onDeleteNote && deleteNote}
+        />
+      )}
     </div>
   );
 }
