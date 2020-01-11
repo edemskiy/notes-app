@@ -2,17 +2,37 @@
   padding: 0 10px;
   width: 100%;
 
-  > .search-form {
+  .search-form {
     background-color: #f1f3f4;
     border-radius: 5px;
     max-width: 720px;
+    display: flex;
+    align-items: center;
 
-    > input {
+    .searchbar-icon {
+      color: #757575;
+      padding: 8px;
+      margin: 0 5px;
+      &:hover {
+        cursor: pointer;
+        color: rgb(0, 0, 0);
+      }
+    }
+
+    .clear-input-icon {
+      visibility: hidden;
+    }
+
+    input {
       padding: 10px;
       width: 100%;
       font-size: 18px;
       background: none;
       border: none;
+
+      &:valid + .clear-input-icon {
+        visibility: visible;
+      }
     }
   }
 }
