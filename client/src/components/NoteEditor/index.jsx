@@ -8,20 +8,41 @@ import { useCallback } from "react";
 export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
   const [noteCopy, setNoteCopy] = useState(note || emptyNote);
   const [hideFields, setHideFields] = useState(!!hideTitleAndTools);
+  const [edited, setEdited] = useState(false);
   const newNoteElement = useRef(null);
   const titleInput = useRef(null);
   const textInput = useRef(null);
+
+  const mounted = useRef();
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      setEdited(true);
+    }
+  }, [noteCopy]);
 
   function openFullEditor() {
     setHideFields(false);
   }
   const closeNoteEditor = useCallback(() => {
-    updateNote(noteCopy);
+    if (edited) {
+      updateNote(noteCopy);
+    }
     setHideFields(true);
     setNoteCopy(emptyNote);
     clearNoteEditor();
-    onClose && onClose();
-  }, [noteCopy, updateNote, onClose]);
+
+    if (typeof onClose === "function") {
+      onClose();
+    }
+  }, [noteCopy, updateNote, onClose, edited]);
+
+  useEffect(() => {
+    if (noteCopy.isTrashed) {
+      closeNoteEditor();
+    }
+  }, [noteCopy, closeNoteEditor]);
 
   function innerHTMLtoStr(s) {
     return s
@@ -67,12 +88,6 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
       [event.target.dataset.name]: innerHTMLtoStr(event.target.innerHTML)
     });
   }
-
-  useEffect(() => {
-    if (noteCopy.isTrashed) {
-      closeNoteEditor();
-    }
-  }, [noteCopy, closeNoteEditor]);
 
   return (
     <div
