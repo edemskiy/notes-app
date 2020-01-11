@@ -13,7 +13,7 @@ export function NavBar({ setSearchPattern }) {
             <div className="menu-icon">
               <i className="fas fa-bars"></i>
             </div>
-            <a href="#" className="logo">
+            <a href="/" className="logo">
               <i className="far fa-sticky-note"></i>
               <span>Notes</span>
             </a>

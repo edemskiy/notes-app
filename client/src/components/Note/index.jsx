@@ -31,7 +31,12 @@ export function Note({ note, updateNote, openNoteEditor, hidden }) {
         </div>
       </div>
 
-      <NoteTools note={note} updateNote={updateNote} hidden={isToolsHidden} />
+      <NoteTools
+        note={note}
+        updateNote={updateNote}
+        hidden={isToolsHidden}
+        hideCloseButton={true}
+      />
     </div>
   );
 }

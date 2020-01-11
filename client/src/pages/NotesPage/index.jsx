@@ -9,7 +9,7 @@ import "./NotesPage.scss";
 
 export default function NotesPage({ searchPattern }) {
   const { userToken } = useContext(AuthContext);
-  const { request, error } = useRequest();
+  const { request } = useRequest();
   const [notes, setNotes] = useState({});
   const [isEditorOpen, setEditorOpen] = useState(false);
   const [activeNoteId, setactiveNoteId] = useState(null);
@@ -90,7 +90,7 @@ export default function NotesPage({ searchPattern }) {
             />
           ))}
       </div>
-
+      {/* yep, repeat. Will make it a component when React.Context is added */}
       <div className="notes other-notes">
         {Object.values(notes)
           .filter(
@@ -117,7 +117,7 @@ export default function NotesPage({ searchPattern }) {
           <NoteEditor
             note={notes[activeNoteId]}
             updateNote={updateNote}
-            onOutsideClick={closeNoteEditor}
+            onClose={closeNoteEditor}
           />
         </div>
       )}

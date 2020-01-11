@@ -6,7 +6,7 @@
   transition: 0.3s ease-in;
   color: #5f6368;
 
-  > *:not(.color-palette) {
+  .note-tool {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,6 +56,21 @@
     &:hover + .color-palette {
       visibility: visible;
       opacity: 1;
+    }
+  }
+
+  .btn-close {
+    position: absolute;
+    right: 0;
+    padding: 5px 30px;
+    margin: 0 10px;
+
+    button {
+      font-size: 14px;
+      font-weight: 500;
+      color: inherit;
+      background-color: transparent;
+      border: none;
     }
   }
 

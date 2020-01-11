@@ -2,13 +2,18 @@ import React from "react";
 import { noteColors } from "../../constants/note";
 import "./NoteTools.scss";
 
-export function NoteTools({ hidden, note, updateNote, onDeleteNote }) {
+export function NoteTools({
+  hidden,
+  hideCloseButton,
+  note,
+  updateNote,
+  onClose
+}) {
   function onColorPick(color) {
     updateNote({ ...note, color });
   }
   function onDeleteClick() {
     updateNote({ ...note, isTrashed: true });
-    onDeleteNote && onDeleteNote();
   }
   function onPinClick() {
     updateNote({ ...note, isPinned: !note.isPinned });
@@ -17,7 +22,7 @@ export function NoteTools({ hidden, note, updateNote, onDeleteNote }) {
     <div className={"note-tools " + (hidden ? "opacity-0" : "opacity-1")}>
       {onColorPick && (
         <>
-          <div className="color-picker-btn">
+          <div className="color-picker-btn note-tool">
             <i className="fas fa-palette"></i>
           </div>
 
@@ -35,13 +40,19 @@ export function NoteTools({ hidden, note, updateNote, onDeleteNote }) {
       )}
 
       {note && (
-        <i className="delete-btn" onClick={onDeleteClick}>
+        <div className="delete-btn note-tool" onClick={onDeleteClick}>
           <i className="fas fa-trash"></i>
-        </i>
+        </div>
+      )}
+
+      {!hideCloseButton && (
+        <div className="btn-close note-tool" onClick={onClose}>
+          <button className="s">Close</button>
+        </div>
       )}
 
       <div
-        className={"pin-btn " + (note.isPinned ? "pinned" : "")}
+        className={"pin-btn note-tool " + (note.isPinned ? "pinned" : "")}
         onClick={onPinClick}
       >
         <i className="fas fa-thumbtack"></i>

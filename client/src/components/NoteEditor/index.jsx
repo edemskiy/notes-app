@@ -3,13 +3,9 @@ import { NoteTools } from "../NoteTools";
 import { emptyNote } from "../../states/note";
 import { noteColors } from "../../constants/note";
 import "./NoteEditor.scss";
+import { useCallback } from "react";
 
-export function NoteEditor({
-  note,
-  updateNote,
-  onOutsideClick,
-  hideTitleAndTools
-}) {
+export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
   const [noteCopy, setNoteCopy] = useState(note || emptyNote);
   const [hideFields, setHideFields] = useState(!!hideTitleAndTools);
   const newNoteElement = useRef(null);
@@ -19,12 +15,13 @@ export function NoteEditor({
   function openFullEditor() {
     setHideFields(false);
   }
-  function closeNoteEditor() {
+  const closeNoteEditor = useCallback(() => {
+    updateNote(noteCopy);
     setHideFields(true);
     setNoteCopy(emptyNote);
     clearNoteEditor();
-    onOutsideClick && onOutsideClick();
-  }
+    onClose && onClose();
+  }, [noteCopy, updateNote, onClose]);
 
   function innerHTMLtoStr(s) {
     return s
@@ -45,7 +42,7 @@ export function NoteEditor({
       !newNoteElement.current.contains(event.target) &&
       !hideFields
     ) {
-      saveNote();
+      closeNoteEditor();
     }
   }
   useEffect(() => {
@@ -70,15 +67,12 @@ export function NoteEditor({
       [event.target.dataset.name]: innerHTMLtoStr(event.target.innerHTML)
     });
   }
-  function saveNote() {
-    updateNote(noteCopy);
-    closeNoteEditor();
-  }
+
   useEffect(() => {
     if (noteCopy.isTrashed) {
-      saveNote();
+      closeNoteEditor();
     }
-  }, [noteCopy]);
+  }, [noteCopy, closeNoteEditor]);
 
   return (
     <div
@@ -122,7 +116,13 @@ export function NoteEditor({
         {note &&
           note.text.split("\n").map((line, i) => <div key={i}>{line}</div>)}
       </div>
-      {!hideFields && <NoteTools note={noteCopy} updateNote={setNoteCopy} />}
+      {!hideFields && (
+        <NoteTools
+          note={noteCopy}
+          updateNote={setNoteCopy}
+          onClose={closeNoteEditor}
+        />
+      )}
     </div>
   );
 }
