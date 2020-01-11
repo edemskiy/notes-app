@@ -19,7 +19,7 @@ export function SearchBar({ setSearchPattern }) {
         </label>
         <input
           placeholder="search"
-          autocomplete="off"
+          autoComplete="off"
           id="search-input"
           required="required"
           onChange={updateSearchPattern}
