@@ -15,7 +15,6 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
 
   const mounted = useRef();
   useEffect(() => {
-    console.log(noteCopy);
     if (!mounted.current) {
       mounted.current = true;
     } else {
