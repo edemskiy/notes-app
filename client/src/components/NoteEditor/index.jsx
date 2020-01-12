@@ -15,6 +15,7 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
 
   const mounted = useRef();
   useEffect(() => {
+    console.log(noteCopy);
     if (!mounted.current) {
       mounted.current = true;
     } else {
@@ -48,7 +49,8 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
     return s
       .replace(/<div>/gi, "\n")
       .replace(/<\/div>/gi, "")
-      .replace(/<br>/gi, "");
+      .replace(/<br>/gi, "")
+      .replace(/^\n/, "");
   }
 
   function clearNoteEditor() {
