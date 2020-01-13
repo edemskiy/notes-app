@@ -90,6 +90,13 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
     });
   }
 
+  function pasteHandler(event) {
+    event.preventDefault();
+    const plainPastedText = event.clipboardData.getData("text/plain");
+    console.log(plainPastedText);
+    document.execCommand("insertHTML", false, plainPastedText);
+  }
+
   return (
     <div
       className="note-editor"
@@ -108,6 +115,7 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
           aria-label="Title"
           spellCheck="true"
           ref={titleInput}
+          onPaste={pasteHandler}
           onKeyDown={inputKeyDownHandler}
           onKeyUp={inputKeyUpHandler}
         >
@@ -125,6 +133,7 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
         data-name="text"
         spellCheck="true"
         onClick={openFullEditor}
+        onPaste={pasteHandler}
         ref={textInput}
         onKeyDown={inputKeyDownHandler}
         onKeyUp={inputKeyUpHandler}

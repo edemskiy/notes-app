@@ -6,6 +6,8 @@
   margin: 10px;
   width: 100%;
   max-width: 240px;
+  max-height: 400px;
+  overflow: hidden;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
 
@@ -32,6 +34,9 @@
 
   .note-text {
     padding: 12px 16px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
     div:empty {
       line-height: 1.2;
       min-height: 1.2em;
