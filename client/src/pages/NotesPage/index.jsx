@@ -50,7 +50,7 @@ export default function NotesPage({ searchPattern }) {
   }
 
   function updateNote(note) {
-    const editedNote = { ...note, editedAt: Date.now() };
+    const editedNote = { ...note, editedAt: new Date().toISOString() };
     changeNoteState(editedNote);
     request(`/api/notes/update/${note._id}`, "PUT", editedNote, {
       auth: `Bearer ${userToken}`
