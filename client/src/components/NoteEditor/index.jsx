@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { NoteTools } from "../NoteTools";
 import { emptyNote } from "../../states/note";
-import { noteColors } from "../../constants/note";
+import { noteColors, localeDateOptions } from "../../constants/note";
 import "./NoteEditor.scss";
 import { useCallback } from "react";
 
@@ -98,13 +98,13 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
     >
       {!hideFields && (
         <div
+          className="note-title"
           contentEditable="true"
           suppressContentEditableWarning="true"
           aria-multiline="false"
           role="textbox"
           tabIndex="1"
           data-name="title"
-          className="note-title"
           aria-label="Title"
           spellCheck="true"
           ref={titleInput}
@@ -115,11 +115,11 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
         </div>
       )}
       <div
+        className="note-text"
         contentEditable="true"
         suppressContentEditableWarning="true"
         aria-multiline="true"
         role="textbox"
-        className="note-text"
         aria-label="Take a note…"
         tabIndex="2"
         data-name="text"
@@ -132,6 +132,24 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
         {note &&
           note.text.split("\n").map((line, i) => <div key={i}>{line}</div>)}
       </div>
+
+      {note && (
+        <div className="note-info">
+          <span
+            className="note-datetime"
+            aria-label={new Date(note.createdAt).toLocaleString(
+              undefined,
+              localeDateOptions
+            )}
+          >
+            Edited &nbsp;
+            {new Date(note.editedAt).toLocaleString(
+              undefined,
+              localeDateOptions
+            )}
+          </span>
+        </div>
+      )}
       {!hideFields && (
         <NoteTools
           note={noteCopy}
