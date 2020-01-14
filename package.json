@@ -4,10 +4,11 @@
   "description": "Notes web application",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js & npm i --prefix client && npm run build --prefix client",
+    "start": "node app.js",
     "server": "nodemon app.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "Alexander Edemsky <qapple@ya.ru>",
   "license": "ISC",
