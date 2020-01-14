@@ -4,6 +4,10 @@ export function useRequest() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  function clearError() {
+    setError(null);
+  }
+
   const request = useCallback(
     (url, method = "GET", body = null, headers = {}) => {
       let responseOK = true;
@@ -34,5 +38,5 @@ export function useRequest() {
     []
   );
 
-  return { isLoading, request, error };
+  return { isLoading, request, error, clearError };
 }

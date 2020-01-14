@@ -9,7 +9,7 @@ import "./AuthPage.scss";
 
 export default function AuthPage() {
   const { login } = useContext(AuthContext);
-  const { isLoading, request, error } = useRequest();
+  const { isLoading, request, error, clearError } = useRequest();
   const [infoMessageVisible, setInfoMessageVisible] = useState(false);
   const [infoMessageText, setInfoMessageText] = useState("");
   function onInfoMessageClose(event, reason) {
@@ -18,6 +18,7 @@ export default function AuthPage() {
     }
     setInfoMessageText("");
     setInfoMessageVisible(false);
+    clearError();
   }
 
   const [credentials, setCredentials] = useState({ email: "", password: "" });
