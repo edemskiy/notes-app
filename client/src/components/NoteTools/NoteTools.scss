@@ -44,6 +44,23 @@
         border-color: #000;
       }
     }
+    .active-color {
+      position: relative;
+      border-color: rgb(121, 121, 121);
+
+      &:hover {
+        border-color: #000;
+      }
+
+      .tick-symbol {
+        &:before {
+          position: absolute;
+          content: "\2713";
+          top: 20%;
+          left: 30%;
+        }
+      }
+    }
 
     &:hover {
       visibility: visible;

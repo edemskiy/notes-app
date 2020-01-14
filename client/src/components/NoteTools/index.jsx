@@ -31,9 +31,12 @@ export function NoteTools({
               <div
                 key={i}
                 data-color={color}
+                className={note.color === color ? "active-color" : ""}
                 style={{ backgroundColor: noteColors[color] }}
                 onClick={onColorPick.bind(null, color)}
-              ></div>
+              >
+                <span className="tick-symbol" />
+              </div>
             ))}
           </div>
         </>
