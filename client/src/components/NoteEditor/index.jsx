@@ -26,7 +26,7 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
     setHideFields(false);
   }
   const closeNoteEditor = useCallback(() => {
-    if (edited) {
+    if (edited || noteCopy.isTrashed) {
       updateNote(noteCopy);
     }
     setHideFields(true);
