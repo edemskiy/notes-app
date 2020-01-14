@@ -4,9 +4,10 @@
   "description": "Notes web application",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "server": "nodemon app.js",
     "client": "npm run start --prefix client",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Alexander Edemsky <qapple@ya.ru>",
   "license": "ISC",
