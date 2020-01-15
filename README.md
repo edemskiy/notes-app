@@ -6,4 +6,4 @@ Notes app inspired by Google Keep design.
   
 &ast;You can use any email-like login to register(e.g. test@demo.com). App doesn't contain email verification, but only checking email pattern.  
 
-![](https://raw.githubusercontent.com/edemskiy/edemskiy.github.io/master/img/notes.png)
+![](https://raw.githubusercontent.com/edemskiy/edemskiy.github.io/21042d19aba524785f7eca2475d33cdef71bd42c/img/notes.png)
