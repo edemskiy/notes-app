@@ -13,7 +13,7 @@ export default function NotesPage({ searchPattern }) {
   const { request } = useRequest();
   const [notes, setNotes] = useState({});
   const [isEditorOpen, setEditorOpen] = useState(false);
-  const [activeNoteId, setactiveNoteId] = useState(null);
+  const [activeNoteInfo, setActiveNoteInfo] = useState(null);
 
   const fetchNotes = useCallback(() => {
     request("/api/notes", "GET", null, {
@@ -58,14 +58,14 @@ export default function NotesPage({ searchPattern }) {
     });
   }
 
-  function openNoteEditor(noteId) {
+  function openNoteEditor({ id, boundingClientRect }) {
     setEditorOpen(true);
-    setactiveNoteId(noteId);
+    setActiveNoteInfo({ id, boundingClientRect });
   }
 
   function closeNoteEditor() {
     setEditorOpen(false);
-    setactiveNoteId(null);
+    setActiveNoteInfo(null);
   }
 
   const notesToShow = Object.values(notes)
@@ -85,11 +85,11 @@ export default function NotesPage({ searchPattern }) {
           .filter(note => note.isPinned)
           .map(note => (
             <Note
-              openNoteEditor={openNoteEditor.bind(null, note._id)}
+              openNoteEditor={openNoteEditor}
               key={note._id}
               note={note}
               updateNote={updateNote}
-              hidden={isEditorOpen && note._id === activeNoteId}
+              hidden={isEditorOpen && note._id === activeNoteInfo.id}
             />
           ))}
       </div>
@@ -99,11 +99,11 @@ export default function NotesPage({ searchPattern }) {
           .filter(note => !note.isPinned)
           .map(note => (
             <Note
-              openNoteEditor={openNoteEditor.bind(null, note._id)}
+              openNoteEditor={openNoteEditor}
               key={note._id}
               note={note}
               updateNote={updateNote}
-              hidden={isEditorOpen && note._id === activeNoteId}
+              hidden={isEditorOpen && note._id === activeNoteInfo.id}
             />
           ))}
       </div>
@@ -111,9 +111,10 @@ export default function NotesPage({ searchPattern }) {
       {isEditorOpen && (
         <div className="modal-back">
           <NoteEditor
-            note={notes[activeNoteId]}
+            note={notes[activeNoteInfo.id]}
             updateNote={updateNote}
             onClose={closeNoteEditor}
+            initialPosition={activeNoteInfo.boundingClientRect}
           />
         </div>
       )}

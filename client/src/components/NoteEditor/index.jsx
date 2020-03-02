@@ -5,7 +5,13 @@ import { noteColors, localeDateOptions } from "../../constants/note";
 import "./NoteEditor.scss";
 import { useCallback } from "react";
 
-export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
+export function NoteEditor({
+  note,
+  initialPosition,
+  updateNote,
+  onClose,
+  hideTitleAndTools
+}) {
   const [noteCopy, setNoteCopy] = useState(note || emptyNote);
   const [hideFields, setHideFields] = useState(!!hideTitleAndTools);
   const [edited, setEdited] = useState(false);
@@ -46,9 +52,9 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
 
   function innerHTMLtoStr(s) {
     return s
-      .replace(/<div>/gi, "\n")
-      .replace(/<\/div>/gi, "")
-      .replace(/<br>/gi, "")
+      .replace(/<div>/g, "\n")
+      .replace(/<\/div>/g, "")
+      .replace(/<br>/g, "")
       .replace(/^\n/, "");
   }
 
@@ -93,7 +99,6 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
   function pasteHandler(event) {
     event.preventDefault();
     const plainPastedText = event.clipboardData.getData("text/plain");
-    console.log(plainPastedText);
     document.execCommand("insertHTML", false, plainPastedText);
   }
 
