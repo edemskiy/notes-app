@@ -3,8 +3,9 @@ import { Note } from "../../components/Note";
 import { NoteEditor } from "../../components/NoteEditor";
 import { AuthContext } from "../../context/AuthContext";
 import { useRequest } from "../../hooks/request";
-
 import { Container } from "@material-ui/core";
+
+import { isSubstr } from "../../utils/main";
 import "./NotesPage.scss";
 
 export default function NotesPage({ searchPattern }) {
@@ -67,20 +68,21 @@ export default function NotesPage({ searchPattern }) {
     setactiveNoteId(null);
   }
 
+  const notesToShow = Object.values(notes)
+    .filter(
+      note =>
+        isSubstr(note.title, searchPattern) ||
+        isSubstr(note.text, searchPattern)
+    )
+    .reverse();
+
   return (
     <Container>
       <NoteEditor updateNote={addNote} hideTitleAndTools={true} />
 
       <div className="notes pinned-notes">
-        {Object.values(notes)
-          .filter(
-            note =>
-              !note.isTrashed &&
-              note.isPinned &&
-              (note.title.toLowerCase().includes(searchPattern.toLowerCase()) ||
-                note.text.toLowerCase().includes(searchPattern.toLowerCase()))
-          )
-          .reverse()
+        {notesToShow
+          .filter(note => note.isPinned)
           .map(note => (
             <Note
               openNoteEditor={openNoteEditor.bind(null, note._id)}
@@ -93,15 +95,8 @@ export default function NotesPage({ searchPattern }) {
       </div>
       {/* yep, repeat. Will make it a component when React.Context is added */}
       <div className="notes other-notes">
-        {Object.values(notes)
-          .filter(
-            note =>
-              !note.isTrashed &&
-              !note.isPinned &&
-              (note.title.toLowerCase().includes(searchPattern.toLowerCase()) ||
-                note.text.toLowerCase().includes(searchPattern.toLowerCase()))
-          )
-          .reverse()
+        {notesToShow
+          .filter(note => !note.isPinned)
           .map(note => (
             <Note
               openNoteEditor={openNoteEditor.bind(null, note._id)}

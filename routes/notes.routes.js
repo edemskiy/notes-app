@@ -24,7 +24,7 @@ router.post("/create", auth, (req, res) => {
 });
 
 router.get("/", auth, (req, res) => {
-  Note.find({ owner: req.userId })
+  Note.find({ owner: req.userId, isTrashed: false })
     .then(notes => res.status(201).json({ notes }))
     .catch(err =>
       res.status(500).json({ message: "Server error. Try again later" })
