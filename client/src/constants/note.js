@@ -6,12 +6,5 @@ export const noteColors = {
   purple: "#d7aefb",
   pink: "#fdcfe8",
   yellow: "#fff475",
-  grey: "#e8eaed"
-};
-
-export const localeDateOptions = {
-  month: "short",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit"
+  grey: "#e8eaed",
 };

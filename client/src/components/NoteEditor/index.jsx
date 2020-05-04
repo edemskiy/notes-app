@@ -1,17 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { NoteTools } from "../NoteTools";
 import { emptyNote } from "../../states/note";
-import { noteColors, localeDateOptions } from "../../constants/note";
+import { noteColors } from "../../constants/note";
 import "./NoteEditor.scss";
 import { useCallback } from "react";
+import { formatDate } from "../../utils/main";
 
-export function NoteEditor({
-  note,
-  initialPosition,
-  updateNote,
-  onClose,
-  hideTitleAndTools
-}) {
+export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
   const [noteCopy, setNoteCopy] = useState(note || emptyNote);
   const [hideFields, setHideFields] = useState(!!hideTitleAndTools);
   const [edited, setEdited] = useState(false);
@@ -92,7 +87,7 @@ export function NoteEditor({
     }
     setNoteCopy({
       ...noteCopy,
-      [event.target.dataset.name]: innerHTMLtoStr(event.target.innerHTML)
+      [event.target.dataset.name]: innerHTMLtoStr(event.target.innerHTML),
     });
   }
 
@@ -151,16 +146,9 @@ export function NoteEditor({
         <div className="note-info">
           <span
             className="note-datetime"
-            aria-label={new Date(note.createdAt).toLocaleString(
-              undefined,
-              localeDateOptions
-            )}
+            aria-label={formatDate(note.createdAt)}
           >
-            Edited &nbsp;
-            {new Date(note.editedAt).toLocaleString(
-              undefined,
-              localeDateOptions
-            )}
+            Edited {formatDate(note.editedAt)}
           </span>
         </div>
       )}
