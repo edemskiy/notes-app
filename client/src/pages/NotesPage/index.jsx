@@ -3,9 +3,8 @@ import { Note } from "../../components/Note";
 import { NoteEditor } from "../../components/NoteEditor";
 import { AuthContext } from "../../context/AuthContext";
 import { useRequest } from "../../hooks/request";
-import { Container } from "@material-ui/core";
-
 import { isSubstr } from "../../utils/main";
+import { Container } from "@material-ui/core";
 import "./NotesPage.scss";
 
 export default function NotesPage({ searchPattern }) {
@@ -17,13 +16,13 @@ export default function NotesPage({ searchPattern }) {
 
   const fetchNotes = useCallback(() => {
     request("/api/notes", "GET", null, {
-      auth: `Bearer ${userToken}`
-    }).then(res => {
+      auth: `Bearer ${userToken}`,
+    }).then((res) => {
       setNotes(
         res.notes.reduce(
           (notesMap, note) => ({
             ...notesMap,
-            [note._id]: note
+            [note._id]: note,
           }),
           Object.create(null)
         )
@@ -44,8 +43,8 @@ export default function NotesPage({ searchPattern }) {
       return;
     }
     request("/api/notes/create", "POST", note, {
-      auth: `Bearer ${userToken}`
-    }).then(res => {
+      auth: `Bearer ${userToken}`,
+    }).then((res) => {
       setNotes({ ...notes, [res.note._id]: res.note });
     });
   }
@@ -54,7 +53,7 @@ export default function NotesPage({ searchPattern }) {
     const editedNote = { ...note, editedAt: new Date().toISOString() };
     changeNoteState(editedNote);
     request(`/api/notes/update/${note._id}`, "PUT", editedNote, {
-      auth: `Bearer ${userToken}`
+      auth: `Bearer ${userToken}`,
     });
   }
 
@@ -70,20 +69,25 @@ export default function NotesPage({ searchPattern }) {
 
   const notesToShow = Object.values(notes)
     .filter(
-      note =>
+      (note) =>
         isSubstr(note.title, searchPattern) ||
         isSubstr(note.text, searchPattern)
     )
     .reverse();
 
+  const pinnedNotes = notesToShow.filter((note) => note.isPinned);
+  const notPinnedNotes = notesToShow.filter((note) => !note.isPinned);
+
   return (
     <Container>
       <NoteEditor updateNote={addNote} hideTitleAndTools={true} />
 
-      <div className="notes pinned-notes">
-        {notesToShow
-          .filter(note => note.isPinned)
-          .map(note => (
+      {[pinnedNotes, notPinnedNotes].map((notes, i) => (
+        <div
+          className={"notes " + (i ? "other-notes" : "pinned-notes")}
+          key={i}
+        >
+          {notes.map((note) => (
             <Note
               openNoteEditor={openNoteEditor}
               key={note._id}
@@ -92,21 +96,8 @@ export default function NotesPage({ searchPattern }) {
               hidden={isEditorOpen && note._id === activeNoteInfo.id}
             />
           ))}
-      </div>
-      {/* yep, repeat. Will make it a component when React.Context is added */}
-      <div className="notes other-notes">
-        {notesToShow
-          .filter(note => !note.isPinned)
-          .map(note => (
-            <Note
-              openNoteEditor={openNoteEditor}
-              key={note._id}
-              note={note}
-              updateNote={updateNote}
-              hidden={isEditorOpen && note._id === activeNoteInfo.id}
-            />
-          ))}
-      </div>
+        </div>
+      ))}
 
       {isEditorOpen && (
         <div className="modal-back">

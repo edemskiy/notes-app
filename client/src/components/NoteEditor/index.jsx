@@ -1,10 +1,9 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { NoteTools } from "../NoteTools";
 import { emptyNote } from "../../states/note";
 import { noteColors } from "../../constants/note";
-import "./NoteEditor.scss";
-import { useCallback } from "react";
 import { formatDate } from "../../utils/main";
+import "./NoteEditor.scss";
 
 export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
   const [noteCopy, setNoteCopy] = useState(note || emptyNote);
@@ -162,5 +161,3 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
     </div>
   );
 }
-
-// export const NoteEditor = React.memo(NoteEditorComponent, () => true);

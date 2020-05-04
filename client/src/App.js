@@ -6,7 +6,7 @@ import { AuthContext } from "./context/AuthContext";
 import { NavBar } from "./components/NavBar";
 
 function App() {
-  const { login, logout, userToken, userId, isReady } = useAuth();
+  const { login, logout, userToken, userId } = useAuth();
   const isUserLoggedIn = !!userToken;
 
   const [searchPattern, setSearchPattern] = React.useState("");
