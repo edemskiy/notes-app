@@ -10,47 +10,48 @@ router.post("/create", auth, (req, res) => {
     ...req.body,
     owner: req.userId,
     createdAt: currentDate,
-    editedAt: currentDate
+    editedAt: currentDate,
   });
 
   newNote
     .save()
-    .then(note => {
-      res.status(201).json({ note });
+    .then((note) => {
+      res.status(201).json(note);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({ message: "Server error. Try again later" });
     });
 });
 
 router.get("/", auth, (req, res) => {
   Note.find({ owner: req.userId, isTrashed: false })
-    .then(notes => res.status(201).json({ notes }))
-    .catch(err =>
+    .then((notes) => res.status(201).json(notes))
+    .catch((err) =>
       res.status(500).json({ message: "Server error. Try again later" })
     );
 });
 
 router.put("/update/:id", auth, (req, res) => {
   Note.findById(req.params.id)
-    .then(note => {
-      if (note.owner.toString() !== req.userId) {
+    .then((note) => {
+      if (!note.owner.equals(req.userId)) {
         throw new Error("Permission denied");
       }
       return Note.findByIdAndUpdate(req.params.id, req.body);
     })
-    .then(note =>
+    .then((note) =>
       res.status(200).json({ message: "Updated succesfully", note })
     )
-    .catch(err =>
-      res.status(500).json({ message: "Server error. Try again later" })
-    );
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Server error. Try again later" });
+    });
 });
 
 router.delete("/delete/:id", auth, (req, res) => {
   Note.deleteOne({ owner: req.userId, _id: req.params.id })
     .then(() => res.status(200).json({ message: "Note deleted" }))
-    .catch(err =>
+    .catch((err) =>
       res.status(500).json({ message: "Server error. Try again later" })
     );
 });

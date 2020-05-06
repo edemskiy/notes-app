@@ -10,49 +10,38 @@ import "./NotesPage.scss";
 export default function NotesPage({ searchPattern }) {
   const { userToken } = useContext(AuthContext);
   const { request } = useRequest();
-  const [notes, setNotes] = useState({});
+  const [notes, setNotes] = useState([]);
   const [isEditorOpen, setEditorOpen] = useState(false);
   const [activeNoteInfo, setActiveNoteInfo] = useState(null);
 
   const fetchNotes = useCallback(() => {
     request("/api/notes", "GET", null, {
       auth: `Bearer ${userToken}`,
-    }).then((res) => {
-      setNotes(
-        res.notes.reduce(
-          (notesMap, note) => ({
-            ...notesMap,
-            [note._id]: note,
-          }),
-          Object.create(null)
-        )
-      );
-    });
+    }).then((notes) => setNotes(notes));
   }, [userToken, request]);
 
   useEffect(() => {
     fetchNotes();
   }, [fetchNotes]);
 
-  function changeNoteState({ _id, ...newProperties }) {
-    setNotes({ ...notes, [_id]: { ...notes[_id], ...newProperties } });
-  }
-
-  function addNote(note) {
-    if (!note.title && !note.text) {
+  function createNote(note) {
+    if (!note.title || !note.text) {
       return;
     }
     request("/api/notes/create", "POST", note, {
       auth: `Bearer ${userToken}`,
-    }).then((res) => {
-      setNotes({ ...notes, [res.note._id]: res.note });
-    });
+    }).then((note) => setNotes([...notes, note]));
   }
 
-  function updateNote(note) {
-    const editedNote = { ...note, editedAt: new Date().toISOString() };
-    changeNoteState(editedNote);
-    request(`/api/notes/update/${note._id}`, "PUT", editedNote, {
+  function findNoteById(id) {
+    return notes.find((note) => note._id === id);
+  }
+
+  function updateNote(updatedNote) {
+    let noteIndex = notes.findIndex((note) => note._id === updatedNote._id);
+    notes[noteIndex] = { ...notes[noteIndex], ...updatedNote };
+
+    request(`/api/notes/update/${updatedNote._id}`, "PUT", updatedNote, {
       auth: `Bearer ${userToken}`,
     });
   }
@@ -67,7 +56,7 @@ export default function NotesPage({ searchPattern }) {
     setActiveNoteInfo(null);
   }
 
-  const notesToShow = Object.values(notes)
+  const notesToShow = notes
     .filter(
       (note) =>
         isSubstr(note.title, searchPattern) ||
@@ -80,7 +69,7 @@ export default function NotesPage({ searchPattern }) {
 
   return (
     <Container>
-      <NoteEditor updateNote={addNote} hideTitleAndTools={true} />
+      <NoteEditor updateNote={createNote} hideTitleAndTools={true} />
 
       {[pinnedNotes, notPinnedNotes].map((notes, i) => (
         <div
@@ -102,10 +91,9 @@ export default function NotesPage({ searchPattern }) {
       {isEditorOpen && (
         <div className="modal-back">
           <NoteEditor
-            note={notes[activeNoteInfo.id]}
+            note={findNoteById(activeNoteInfo.id)}
             updateNote={updateNote}
             onClose={closeNoteEditor}
-            initialPosition={activeNoteInfo.boundingClientRect}
           />
         </div>
       )}
