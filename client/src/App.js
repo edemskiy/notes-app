@@ -13,9 +13,7 @@ function App() {
   const routes = useRoutes(isUserLoggedIn, searchPattern);
 
   return (
-    <AuthContext.Provider
-      value={{ login, logout, userToken, userId, isUserLoggedIn }}
-    >
+    <AuthContext.Provider value={{ login, logout, userToken, userId, isUserLoggedIn }}>
       {isUserLoggedIn && <NavBar setSearchPattern={setSearchPattern} />}
       <BrowserRouter>{routes}</BrowserRouter>
     </AuthContext.Provider>

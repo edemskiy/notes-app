@@ -2,13 +2,7 @@ import React from "react";
 import { noteColors } from "../../constants/note";
 import "./NoteTools.scss";
 
-export function NoteTools({
-  hidden,
-  hideCloseButton,
-  note,
-  updateNote,
-  onClose
-}) {
+export function NoteTools({ hidden, hideCloseButton, note, updateNote, onClose }) {
   function onColorPick(color) {
     updateNote({ ...note, color });
   }
@@ -54,10 +48,7 @@ export function NoteTools({
         </div>
       )}
 
-      <div
-        className={"pin-btn note-tool " + (note.isPinned ? "pinned" : "")}
-        onClick={onPinClick}
-      >
+      <div className={"pin-btn note-tool " + (note.isPinned ? "pinned" : "")} onClick={onPinClick}>
         <i className="fas fa-thumbtack"></i>
       </div>
     </div>

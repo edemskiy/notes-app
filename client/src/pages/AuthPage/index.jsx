@@ -27,7 +27,7 @@ export default function AuthPage() {
   }
 
   function registerHandler() {
-    request("/api/auth/register", "POST", { ...credentials }).then(data => {
+    request("/api/auth/register", "POST", { ...credentials }).then((data) => {
       setInfoMessageText(data.message);
       setInfoMessageVisible(true);
     });
@@ -35,14 +35,14 @@ export default function AuthPage() {
 
   function loginHandler() {
     request("/api/auth/login", "POST", { ...credentials })
-      .then(data => {
+      .then((data) => {
         if (data.userToken && data.userId) {
           return login(data.userToken, data.userId);
         }
         setInfoMessageText(data.message);
         setInfoMessageVisible(true);
       })
-      .catch(err => null);
+      .catch((err) => null);
   }
 
   return (
@@ -50,13 +50,7 @@ export default function AuthPage() {
       <Container>
         <div className="auth_card">
           <h1>Login or register</h1>
-          <TextField
-            onChange={inputCredentialsHandler}
-            label="email"
-            name="email"
-            type="text"
-            disabled={isLoading}
-          />
+          <TextField onChange={inputCredentialsHandler} label="email" name="email" type="text" disabled={isLoading} />
           <TextField
             onChange={inputCredentialsHandler}
             label="password"

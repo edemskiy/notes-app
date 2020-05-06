@@ -57,11 +57,7 @@ export default function NotesPage({ searchPattern }) {
   }
 
   const notesToShow = notes
-    .filter(
-      (note) =>
-        isSubstr(note.title, searchPattern) ||
-        isSubstr(note.text, searchPattern)
-    )
+    .filter((note) => isSubstr(note.title, searchPattern) || isSubstr(note.text, searchPattern))
     .reverse();
 
   const pinnedNotes = notesToShow.filter((note) => note.isPinned);
@@ -72,10 +68,7 @@ export default function NotesPage({ searchPattern }) {
       <NoteEditor updateNote={createNote} hideTitleAndTools={true} />
 
       {[pinnedNotes, notPinnedNotes].map((notes, i) => (
-        <div
-          className={"notes " + (i ? "other-notes" : "pinned-notes")}
-          key={i}
-        >
+        <div className={"notes " + (i ? "other-notes" : "pinned-notes")} key={i}>
           {notes.map((note) => (
             <Note
               openNoteEditor={openNoteEditor}
@@ -90,11 +83,7 @@ export default function NotesPage({ searchPattern }) {
 
       {isEditorOpen && (
         <div className="modal-back">
-          <NoteEditor
-            note={findNoteById(activeNoteInfo.id)}
-            updateNote={updateNote}
-            onClose={closeNoteEditor}
-          />
+          <NoteEditor note={findNoteById(activeNoteInfo.id)} updateNote={updateNote} onClose={closeNoteEditor} />
         </div>
       )}
     </Container>

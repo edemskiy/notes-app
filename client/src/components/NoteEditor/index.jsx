@@ -59,11 +59,7 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
 
   /* close editor on outside click */
   function handleClickOutside(event) {
-    if (
-      newNoteElement.current &&
-      !newNoteElement.current.contains(event.target) &&
-      !hideFields
-    ) {
+    if (newNoteElement.current && !newNoteElement.current.contains(event.target) && !hideFields) {
       closeNoteEditor();
     }
   }
@@ -97,11 +93,7 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
   }
 
   return (
-    <div
-      className="note-editor"
-      ref={newNoteElement}
-      style={{ backgroundColor: noteColors[noteCopy.color] }}
-    >
+    <div className="note-editor" ref={newNoteElement} style={{ backgroundColor: noteColors[noteCopy.color] }}>
       {!hideFields && (
         <div
           className="note-title"
@@ -137,27 +129,17 @@ export function NoteEditor({ note, updateNote, onClose, hideTitleAndTools }) {
         onKeyDown={inputKeyDownHandler}
         onKeyUp={inputKeyUpHandler}
       >
-        {note &&
-          note.text.split("\n").map((line, i) => <div key={i}>{line}</div>)}
+        {note && note.text.split("\n").map((line, i) => <div key={i}>{line}</div>)}
       </div>
 
       {note && (
         <div className="note-info">
-          <span
-            className="note-datetime"
-            aria-label={formatDate(note.createdAt)}
-          >
+          <span className="note-datetime" aria-label={formatDate(note.createdAt)}>
             Edited {formatDate(note.editedAt)}
           </span>
         </div>
       )}
-      {!hideFields && (
-        <NoteTools
-          note={noteCopy}
-          updateNote={setNoteCopy}
-          onClose={closeNoteEditor}
-        />
-      )}
+      {!hideFields && <NoteTools note={noteCopy} updateNote={setNoteCopy} onClose={closeNoteEditor} />}
     </div>
   );
 }

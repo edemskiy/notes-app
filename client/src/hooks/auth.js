@@ -10,10 +10,7 @@ export function useAuth() {
   const login = useCallback((token, id) => {
     setUserToken(token);
     setUserId(id);
-    localStorage.setItem(
-      userLocalDataName,
-      JSON.stringify({ userId: id, userToken: token })
-    );
+    localStorage.setItem(userLocalDataName, JSON.stringify({ userId: id, userToken: token }));
   }, []);
 
   const logout = useCallback(() => {

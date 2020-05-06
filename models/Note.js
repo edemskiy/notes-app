@@ -9,7 +9,7 @@ const noteSchema = new Schema({
   editedAt: { type: Date, default: Date.now() },
   isTrashed: { type: Boolean, default: false },
   isPinned: { type: Boolean, default: false },
-  owner: { type: Types.ObjectId, ref: "User" }
+  owner: { type: Types.ObjectId, ref: "User" },
 });
 
 module.exports = model("Note", noteSchema);

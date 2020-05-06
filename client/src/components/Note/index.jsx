@@ -18,7 +18,7 @@ export function Note({ note, updateNote, openNoteEditor, hidden }) {
   function openNoteEditorWithCurrentNote() {
     openNoteEditor({
       id: note._id,
-      boundingClientRect: noteCard.current.getBoundingClientRect()
+      boundingClientRect: noteCard.current.getBoundingClientRect(),
     });
   }
 
@@ -40,12 +40,7 @@ export function Note({ note, updateNote, openNoteEditor, hidden }) {
         </div>
       </div>
 
-      <NoteTools
-        note={note}
-        updateNote={updateNote}
-        hidden={isToolsHidden}
-        hideCloseButton={true}
-      />
+      <NoteTools note={note} updateNote={updateNote} hidden={isToolsHidden} hideCloseButton={true} />
     </div>
   );
 }
