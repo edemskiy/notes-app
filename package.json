@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Notes web application",
   "main": "app.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "start": "node app.js",
     "server": "nodemon app.js",
